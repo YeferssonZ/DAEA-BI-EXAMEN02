@@ -4,45 +4,48 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Perfil de Usuario</title>
-  
   <!-- Enlace a Bootstrap CSS -->
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
   <div class="container">
     <h1>Películas Votadas por Usuario</h1>
-    <ul>
+    <ul class="list-group">
       <% userVotes.forEach(vote => { %>
-        <li><%= vote.title %> - <%= vote.category %></li>
+        <li class="list-group-item"><%= vote.title %> - <%= vote.category %></li>
       <% }); %>
     </ul>
 
     <h1>Relaciones con Otros Usuarios</h1>
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>Usuario</th>
-          <th>Películas Votadas en Común</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% Object.entries(userRelations).forEach(([username, movies]) => { %>
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead class="thead-dark">
           <tr>
-            <td><%= username %></td>
-            <td>
-              <ul>
-                <% movies.forEach(movie => { %>
-                  <li><%= movie.title %> - <%= movie.category %></li>
-                <% }); %>
-              </ul>
-            </td>
+            <th>Usuario</th>
+            <th>Películas Votadas en Común</th>
+            <th>Porcentaje de Compatibilidad</th>
           </tr>
-        <% }); %>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <% Object.entries(userRelations).forEach(([username, { movies, compatibilityPercentage }]) => { %>
+            <tr>
+              <td><%= username %></td>
+              <td>
+                <ul class="list-unstyled">
+                  <% movies.forEach(movie => { %>
+                    <li><%= movie.title %> - <%= movie.category %></li>
+                  <% }); %>
+                </ul>
+              </td>
+              <td><%= compatibilityPercentage.toFixed(2) %> %</td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
   </div>
 
-  <!-- Scripts de Bootstrap (jQuery y Popper.js requeridos por Bootstrap) -->
+  <!-- Scripts de Bootstrap y jQuery (opcional) -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

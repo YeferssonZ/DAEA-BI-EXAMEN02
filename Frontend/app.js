@@ -87,7 +87,6 @@ app.get('/user', (req, res) => {
   });
 });
 
-
 // Función para calcular las relaciones entre usuarios basadas en categorías de películas votadas
 function calculateUserRelations(userVotes, userMovies) {
   const userRelations = {};
@@ -100,6 +99,14 @@ function calculateUserRelations(userVotes, userMovies) {
     if (userVotes.some(vote => vote.title === title && vote.category === category)) {
       userRelations[username].push({ title, category });
     }
+  });
+
+  // Calcular porcentaje de compatibilidad basado en películas votadas en común
+  Object.entries(userRelations).forEach(([username, movies]) => {
+    const commonVotesCount = movies.length;
+    const totalUserVotesCount = userVotes.length;
+    const compatibilityPercentage = (commonVotesCount / totalUserVotesCount) * 100;
+    userRelations[username] = { movies, compatibilityPercentage };
   });
 
   return userRelations;
