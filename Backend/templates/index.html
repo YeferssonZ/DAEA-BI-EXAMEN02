@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App de Votación de Películas</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="mt-5">Vota por tu película favorita</h1>
+
+        {% if confirmation_message %}
+        <div class="alert alert-success mt-3">
+            {{ confirmation_message }}
+        </div>
+        {% endif %}
+
+        <form method="POST" action="/" onsubmit="return validateForm()">
+            <div class="form-group">
+                <label for="movieSelect">Elige una película:</label>
+                <select class="form-control" id="movieSelect" name="vote" onchange="toggleVoteButton()">
+                    <option value="" selected disabled>Seleccione una película</option>
+                    {% for movie in movies %}
+                    <option value="{{ movie[0] }}">{{ movie[1] }} ({{ movie[2] }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary" id="voteButton" disabled>Votar</button>
+        </form>
+
+        <hr>
+
+        <h2>Películas Actuales:</h2>
+        <ul class="list-group">
+            {% for movie in movies %}
+            <li class="list-group-item">{{ movie[1] }} ({{ movie[2] }})</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function toggleVoteButton() {
+            var movieSelect = document.getElementById("movieSelect");
+            var voteButton = document.getElementById("voteButton");
+
+            // Habilitar el botón si se selecciona una película válida
+            if (movieSelect.value !== "") {
+                voteButton.disabled = false;
+            } else {
+                voteButton.disabled = true;
+            }
+        }
+
+        function validateForm() {
+            var movieSelect = document.getElementById("movieSelect");
+
+            // Validar que se haya seleccionado una película antes de enviar el formulario
+            if (movieSelect.value === "") {
+                alert("Por favor, seleccione una película antes de votar.");
+                return false; // Evitar el envío del formulario si no se ha seleccionado ninguna película
+            }
+
+            return true; // Permitir el envío del formulario si se ha seleccionado una película
+        }
+    </script>
+</body>
+
+</html>
