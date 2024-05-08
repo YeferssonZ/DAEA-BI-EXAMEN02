@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "80:80"
+    depends_on:
+      - db
+      - redis
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+
+  worker:
+    build: ./worker
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345678
+      MYSQL_DATABASE: voting_app
+    ports:
+      - "3306:3306"
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
